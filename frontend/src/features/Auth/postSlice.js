@@ -27,7 +27,7 @@ export const fetchUserPosts = createAsyncThunk(
         });
   
         console.log("API Response:", response.data);
-        return response.data.data; // Ensure data.data exists
+        return response.data.data;
       } catch (error) {
         console.error("Fetch error:", error);
         return rejectWithValue(error.response?.data?.message || 'Failed to fetch your posts');
@@ -108,7 +108,6 @@ const postsSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder
-      // Handle fetchAllPosts
       .addCase(fetchAllPosts.pending, (state) => {
         state.loading = true;
         state.error = null;
@@ -122,7 +121,6 @@ const postsSlice = createSlice({
         state.error = action.payload;
       })
       
-      // Handle fetchUserPosts
       .addCase(fetchUserPosts.pending, (state) => {
         state.loading = true;
         state.error = null;
@@ -135,8 +133,7 @@ const postsSlice = createSlice({
         state.loading = false;
         state.error = action.payload;
       })
-      
-      // Handle createPost
+     
       .addCase(createPost.pending, (state) => {
         state.loading = true;
         state.error = null;
@@ -153,7 +150,6 @@ const postsSlice = createSlice({
         state.success = false;
       })
       
-      // Handle updatePost
       .addCase(updatePost.pending, (state) => {
         state.loading = true;
         state.error = null;
@@ -162,13 +158,11 @@ const postsSlice = createSlice({
       .addCase(updatePost.fulfilled, (state, action) => {
         state.loading = false;
         
-        // Update in userPosts array
         const index = state.userPosts.findIndex(post => post._id === action.payload._id);
         if (index !== -1) {
           state.userPosts[index] = action.payload;
         }
-        
-        // Update currentPost if it's the same post
+       
         if (state.currentPost && state.currentPost._id === action.payload._id) {
           state.currentPost = action.payload;
         }
@@ -181,7 +175,6 @@ const postsSlice = createSlice({
         state.success = false;
       })
       
-      // Handle deletePost
       .addCase(deletePost.pending, (state) => {
         state.loading = true;
         state.error = null;
